@@ -53,7 +53,7 @@
     }
 
     .fc .fc-timegrid-slot {
-      height: 1.8em;
+      height: 60px;
     }
 
     .section-label {
@@ -62,29 +62,6 @@
       text-align: center;
       margin: 20px auto 5px;
       color: #222;
-    }
-
-    /* Class Filters */
-    .filter-bar {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .filter-btn {
-      background: #ddd;
-      border: none;
-      border-radius: 4px;
-      padding: 6px 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .filter-btn.active {
-      background: #333;
-      color: white;
     }
 
     /* Class Colors */
@@ -103,15 +80,6 @@
 <body>
 
   <div class="calendar-container">
-
-    <!-- Filters -->
-    <div class="filter-bar">
-      <button class="filter-btn active" data-type="style" data-value="gi">Gi</button>
-      <button class="filter-btn active" data-type="style" data-value="nogi">NoGi</button>
-      <button class="filter-btn active" data-type="age" data-value="cubs">Cubs</button>
-      <button class="filter-btn active" data-type="age" data-value="kids">Kids</button>
-      <button class="filter-btn active" data-type="age" data-value="adults">Adults</button>
-    </div>
 
     <!-- Label -->
     <div class="section-label">Morning Classes</div>
@@ -134,6 +102,7 @@
     function buildCalendar(elId, slotMin, slotMax, showHeader) {
       const calendar = new FullCalendar.Calendar(document.getElementById(elId), {
         googleCalendarApiKey: 'AIzaSyDfzXSfAOlDL2PXWUzmKTL6z8U4IZIBHuc',
+        height: 400,
         initialView: 'timeGridWeek',
         allDaySlot: false,
         nowIndicator: false,
@@ -191,21 +160,6 @@
       buildCalendar('calendar-am', '06:00:00', '08:00:00', true);
       buildCalendar('calendar-pm', '16:00:00', '21:00:00', false);
 
-      // Toggle filters
-      const buttons = document.querySelectorAll('.filter-btn');
-      buttons.forEach(button => {
-        button.addEventListener('click', () => {
-          const type = button.dataset.type;
-          const value = button.dataset.value;
-          const isActive = button.classList.toggle('active');
-
-          document.querySelectorAll(`.fc-event`).forEach(el => {
-            const match = el.dataset[type] === value;
-            if (match) {
-              el.classList.toggle('hidden', !isActive);
-            }
-          });
-        });
       });
     });
   </script>
