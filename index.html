@@ -52,13 +52,13 @@
       white-space: normal;
     }
 
-    /* Standardize hour row height */
+    /* Standardize row height */
     .fc .fc-timegrid-slot {
-      height: 60px; /* 1 hour = 60px */
+      height: 60px;
     }
 
     .fc .fc-timegrid-slot-minor {
-      display: none; /* hide half-hour lines */
+      display: none;
     }
 
     .section-label {
@@ -67,6 +67,16 @@
       text-align: center;
       margin: 20px auto 5px;
       color: #222;
+    }
+
+    /* Limit AM calendar height */
+    #calendar-am .fc-timegrid-body {
+      max-height: 120px; /* 2 hours × 60px */
+      overflow: hidden;
+    }
+
+    #calendar-am {
+      height: auto !important;
     }
 
     /* Class Colors */
@@ -99,7 +109,7 @@
         initialView: 'timeGridWeek',
         allDaySlot: false,
         nowIndicator: false,
-        expandRows: false,
+        height: 'auto',
         slotMinTime: slotMin,
         slotMaxTime: slotMax,
         scrollTime: slotMin,
