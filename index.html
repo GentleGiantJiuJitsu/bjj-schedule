@@ -52,8 +52,13 @@
       white-space: normal;
     }
 
+    /* Standardize hour row height */
     .fc .fc-timegrid-slot {
-      height: 60px;
+      height: 60px; /* 1 hour = 60px */
+    }
+
+    .fc .fc-timegrid-slot-minor {
+      display: none; /* hide half-hour lines */
     }
 
     .section-label {
@@ -71,26 +76,15 @@
     .nogi-kids  { background-color: #f4a261 !important; color: black; }
     .gi-adults  { background-color: #457b9d !important; color: white; }
     .nogi-adults{ background-color: #9b5de5 !important; color: white; }
-
-    .hidden {
-      display: none !important;
-    }
   </style>
 </head>
 <body>
 
   <div class="calendar-container">
-
-    <!-- Label -->
     <div class="section-label">Morning Classes</div>
-
-    <!-- Top Calendar (AM) -->
     <div id="calendar-am"></div>
 
-    <!-- Label -->
     <div class="section-label">Evening Classes</div>
-
-    <!-- Bottom Calendar (PM) -->
     <div id="calendar-pm"></div>
   </div>
 
@@ -102,7 +96,6 @@
     function buildCalendar(elId, slotMin, slotMax, showHeader) {
       const calendar = new FullCalendar.Calendar(document.getElementById(elId), {
         googleCalendarApiKey: 'AIzaSyDfzXSfAOlDL2PXWUzmKTL6z8U4IZIBHuc',
-        height: 400,
         initialView: 'timeGridWeek',
         allDaySlot: false,
         nowIndicator: false,
@@ -126,13 +119,6 @@
         eventDidMount: function(info) {
           const title = info.event.title.toLowerCase();
           const el = info.el;
-
-          if (title.includes('cubs')) el.dataset.age = 'cubs';
-          else if (title.includes('kids')) el.dataset.age = 'kids';
-          else if (title.includes('adult')) el.dataset.age = 'adults';
-
-          if (title.includes('gi')) el.dataset.style = 'gi';
-          else if (title.includes('nogi')) el.dataset.style = 'nogi';
 
           if (title.includes('cubs') && title.includes('gi')) {
             el.classList.add('gi-cubs');
@@ -159,8 +145,6 @@
     document.addEventListener('DOMContentLoaded', function () {
       buildCalendar('calendar-am', '06:00:00', '08:00:00', true);
       buildCalendar('calendar-pm', '16:00:00', '21:00:00', false);
-
-      });
     });
   </script>
 </body>
