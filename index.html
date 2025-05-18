@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gentle Giant BJJ Schedule</title>
 
+  <!-- FullCalendar CSS -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+
   <style>
     html, body {
       margin: 0;
@@ -31,13 +33,15 @@
 <body>
   <div id="calendar"></div>
 
+  <!-- FullCalendar Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@6.1.8/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const calendarEl = document.getElementById('calendar');
       const calendar = new FullCalendar.Calendar(calendarEl, {
+        googleCalendarApiKey: 'AIzaSyDfzXSfAOlDL2PXWUzmKTL6z8U4IZIBHuc', // 🔒 
         initialView: 'timeGridWeek',
         allDaySlot: false,
         nowIndicator: true,
@@ -58,8 +62,8 @@
         },
         eventSources: [
           {
-            url: 'https://calendar.google.com/calendar/ical/jesse%40gentlegiantjiujitsu.com/public/basic.ics',
-            format: 'ics'
+            googleCalendarId: 'jesse@gentlegiantjiujitsu.com',
+            className: 'default-event'
           }
         ],
         eventDidMount: function(info) {
@@ -80,7 +84,7 @@
           }
         },
         windowResize: function(view) {
-          calendar.changeView('timeGridWeek'); // Force week view on mobile
+          calendar.changeView('timeGridWeek');
         }
       });
 
