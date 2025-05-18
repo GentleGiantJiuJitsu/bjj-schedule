@@ -53,6 +53,21 @@
     .nogi-kids { background-color: #f4a261 !important; color: black; }
     .gi-adults { background-color: #457b9d !important; color: white; }
     .nogi-adults { background-color: #9b5de5 !important; color: white; }
+    .fc-timegrid-slot {
+      height: 1.5em; /* reduces row height for unused time slots */
+    }
+
+    .fc .fc-timegrid-slot-minor {
+      display: none; /* hides half-hour minor lines */
+    }
+
+    .fc .fc-event {
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      padding: 4px 6px;
+    }
+
   </style>
 </head>
 <body>
@@ -74,6 +89,8 @@
         slotMaxTime: '21:00:00',
         scrollTime: '06:00:00',
         slotDuration: '00:30:00',
+        height: 'auto',
+        dayMaxEventRows: false,
         expandRows: true,
         firstDay: 0, // Sunday
         headerToolbar: {
