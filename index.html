@@ -20,18 +20,18 @@
 
     .calendar-container {
       max-width: 1200px;
-      margin: 20px auto;
-      padding: 0 10px;
+      margin: 0 auto;
+      padding: 20px 10px;
     }
 
     .fc .fc-toolbar {
-      display: none; /* Hide duplicate headers */
+      display: none;
     }
 
     .fc:first-of-type .fc-toolbar {
-      display: flex; /* Keep header only on first calendar */
+      display: flex;
       justify-content: center;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
 
     .fc .fc-timegrid-slot-label {
@@ -45,25 +45,81 @@
       font-weight: 600;
       padding: 4px 6px;
       border: 1px solid rgba(0, 0, 0, 0.1);
+      min-height: 40px;
     }
 
     .fc .fc-event-title {
       white-space: normal;
     }
 
+    .fc .fc-timegrid-slot {
+      height: 1.5em;
+    }
+
+    .section-label {
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      margin: 20px auto 5px;
+      color: #222;
+    }
+
+    /* Class Filters */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .filter-btn {
+      background: #ddd;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: #333;
+      color: white;
+    }
+
     /* Class Colors */
-    .gi-cubs { background-color: #1a936f !important; color: white; }
-    .nogi-cubs { background-color: #1a936f !important; color: white; }
-    .gi-kids { background-color: #e63946 !important; color: white; }
-    .nogi-kids { background-color: #f4a261 !important; color: black; }
-    .gi-adults { background-color: #457b9d !important; color: white; }
-    .nogi-adults { background-color: #9b5de5 !important; color: white; }
+    .gi-cubs    { background-color: #1a936f !important; color: white; }
+    .nogi-cubs  { background-color: #1a936f !important; color: white; }
+    .gi-kids    { background-color: #e63946 !important; color: white; }
+    .nogi-kids  { background-color: #f4a261 !important; color: black; }
+    .gi-adults  { background-color: #457b9d !important; color: white; }
+    .nogi-adults{ background-color: #9b5de5 !important; color: white; }
+
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
 
   <div class="calendar-container">
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="gi">Gi</button>
+      <button class="filter-btn active" data-filter="nogi">NoGi</button>
+      <button class="filter-btn active" data-filter="cubs">Cubs</button>
+      <button class="filter-btn active" data-filter="kids">Kids</button>
+      <button class="filter-btn active" data-filter="adults">Adults</button>
+    </div>
+
+    <!-- Top Calendar (AM) -->
     <div id="calendar-am"></div>
+
+    <!-- Label -->
+    <div class="section-label">Evening Classes</div>
+
+    <!-- Bottom Calendar (PM) -->
     <div id="calendar-pm"></div>
   </div>
 
@@ -74,18 +130,16 @@
   <script>
     function buildCalendar(elId, slotMin, slotMax, showHeader) {
       const calendar = new FullCalendar.Calendar(document.getElementById(elId), {
-        googleCalendarApiKey: 'AIzaSyDfzXSfAOlDL2PXWUzmKTL6z8U4IZIBHuc', // Replace with real API key
+        googleCalendarApiKey: 'AIzaSyDfzXSfAOlDL2PXWUzmKTL6z8U4IZIBHuc', // Replace with real key
         initialView: 'timeGridWeek',
         allDaySlot: false,
-        nowIndicator: true,
+        nowIndicator: false,
         expandRows: true,
         slotMinTime: slotMin,
         slotMaxTime: slotMax,
         scrollTime: slotMin,
         firstDay: 0,
-        headerToolbar: showHeader ? {
-          center: 'title'
-        } : false,
+        headerToolbar: showHeader ? { center: 'title' } : false,
         views: {
           timeGridWeek: {
             dayHeaderFormat: { weekday: 'short' }
@@ -99,18 +153,26 @@
         ],
         eventDidMount: function(info) {
           const title = info.event.title.toLowerCase();
+          const el = info.el;
+
           if (title.includes('cubs') && title.includes('gi')) {
-            info.el.classList.add('gi-cubs');
+            el.classList.add('gi-cubs');
+            el.dataset.filter = "gi cubs";
           } else if (title.includes('cubs') && title.includes('nogi')) {
-            info.el.classList.add('nogi-cubs');
+            el.classList.add('nogi-cubs');
+            el.dataset.filter = "nogi cubs";
           } else if (title.includes('kids') && title.includes('gi')) {
-            info.el.classList.add('gi-kids');
+            el.classList.add('gi-kids');
+            el.dataset.filter = "gi kids";
           } else if (title.includes('kids') && title.includes('nogi')) {
-            info.el.classList.add('nogi-kids');
+            el.classList.add('nogi-kids');
+            el.dataset.filter = "nogi kids";
           } else if (title.includes('adult') && title.includes('gi')) {
-            info.el.classList.add('gi-adults');
+            el.classList.add('gi-adults');
+            el.dataset.filter = "gi adults";
           } else if (title.includes('adult') && title.includes('nogi')) {
-            info.el.classList.add('nogi-adults');
+            el.classList.add('nogi-adults');
+            el.dataset.filter = "nogi adults";
           }
         },
         windowResize: function() {
@@ -124,6 +186,20 @@
     document.addEventListener('DOMContentLoaded', function () {
       buildCalendar('calendar-am', '06:00:00', '08:00:00', true);
       buildCalendar('calendar-pm', '16:00:00', '21:00:00', false);
+
+      // Filter logic
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          button.classList.toggle('active');
+          const filter = button.dataset.filter;
+
+          const isOn = button.classList.contains('active');
+          document.querySelectorAll(`[data-filter*="${filter}"]`).forEach(el => {
+            el.classList.toggle('hidden', !isOn);
+          });
+        });
+      });
     });
   </script>
 </body>
