@@ -34,9 +34,17 @@
       margin-bottom: 10px;
     }
 
-    .fc .fc-timegrid-slot-label {
+    /* Style for all time slot labels */
+    .fc-timegrid-slot-label {
       font-size: 12px;
-      color: #666;
+      color: #bbb;
+      font-weight: 400;
+    }
+
+    /* Bold + dark for full hours */
+    .fc .fc-timegrid-slot-label[data-time$="00:00"] {
+      color: #333;
+      font-weight: 700;
     }
 
     .fc .fc-event {
@@ -59,7 +67,7 @@
 
     /* Optional: highlight only the full-hour lines */
     .fc .fc-timegrid-slot.fc-timegrid-slot-lane:nth-of-type(4n) {
-      border-top: 1px solid #ccc; /* full hour lines */
+      border-top: 1px solid #bbb; /* full hour lines */
     }
     
     .fc .fc-timegrid-slot.fc-timegrid-slot-lane {
@@ -68,6 +76,11 @@
 
     .fc .fc-timegrid-slot-minor {
       display: none;
+    }
+
+    .fc .fc-timegrid-slot-label-frame {
+      align-items: flex-start;  /* vertically aligns the time label to top */
+      padding-top: 0;           /* optional: remove extra spacing */
     }
 
     .section-label {
@@ -80,7 +93,7 @@
 
     /* Limit AM calendar height */
     #calendar-am .fc-timegrid-body {
-      max-height: 120px; /* 2 hours × 60px */
+      max-height: 180px; /* 2 hours × 60px */
       overflow: hidden;
     }
 
