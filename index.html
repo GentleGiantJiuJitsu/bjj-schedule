@@ -5,14 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gentle Giant BJJ Schedule</title>
 
-  <!-- FullCalendar CSS -->
+  <!-- Fonts + FullCalendar Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
 
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      font-family: sans-serif;
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fa;
+      color: #111;
     }
 
     #calendar {
@@ -21,21 +24,41 @@
       padding: 0 10px;
     }
 
+    /* Layout tweaks */
+    .fc .fc-timegrid-slot-label {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .fc .fc-timegrid-axis-frame {
+      padding: 0 4px;
+    }
+
+    .fc .fc-event {
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 2px 4px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .fc .fc-event-title {
+      white-space: normal;
+    }
+
     /* Class Colors */
-    .gi-cubs { background-color: #1a936f !important; }
-    .nogi-cubs { background-color: #1a936f !important; }
-    .gi-kids { background-color: #e63946 !important; }
-    .nogi-kids { background-color: #f4a261 !important; }
-    .gi-adults { background-color: #457b9d !important; }
-    .nogi-adults { background-color: #9b5de5 !important; }
-    .fc-timegrid-slot-label { font-size: 0.75rem; }
-    .fc-timegrid-slot { height: 2.5em; }
+    .gi-cubs { background-color: #1a936f !important; color: white; }
+    .nogi-cubs { background-color: #1a936f !important; color: white; }
+    .gi-kids { background-color: #e63946 !important; color: white; }
+    .nogi-kids { background-color: #f4a261 !important; color: black; }
+    .gi-adults { background-color: #457b9d !important; color: white; }
+    .nogi-adults { background-color: #9b5de5 !important; color: white; }
   </style>
 </head>
 <body>
   <div id="calendar"></div>
 
-  <!-- FullCalendar Scripts -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script>
 
@@ -43,16 +66,15 @@
     document.addEventListener('DOMContentLoaded', function () {
       const calendarEl = document.getElementById('calendar');
       const calendar = new FullCalendar.Calendar(calendarEl, {
-        googleCalendarApiKey: 'AIzaSyDfzXSfAOlDL2PXWUzmKTL6z8U4IZIBHuc', // 🔒 
+        googleCalendarApiKey: 'YOUR_API_KEY_HERE', // 🔒 replace with real key
         initialView: 'timeGridWeek',
         allDaySlot: false,
         nowIndicator: true,
-        height: 'auto',
-        expandRows: true,
         slotMinTime: '06:00:00',
         slotMaxTime: '21:00:00',
-        slotDuration: '00:30:00',
         scrollTime: '06:00:00',
+        slotDuration: '00:30:00',
+        expandRows: true,
         firstDay: 0, // Sunday
         headerToolbar: {
           left: '',
@@ -87,7 +109,7 @@
             info.el.classList.add('nogi-adults');
           }
         },
-        windowResize: function(view) {
+        windowResize: function() {
           calendar.changeView('timeGridWeek');
         }
       });
