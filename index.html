@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gentle Giant BJJ Schedule</title>
 
-  <!-- Fonts + FullCalendar Styles -->
+  <!-- Fonts + FullCalendar -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
 
@@ -18,27 +18,32 @@
       color: #111;
     }
 
-    #calendar {
+    .calendar-container {
       max-width: 1200px;
       margin: 20px auto;
       padding: 0 10px;
     }
 
-    /* Layout tweaks */
+    .fc .fc-toolbar {
+      display: none; /* Hide duplicate headers */
+    }
+
+    .fc:first-of-type .fc-toolbar {
+      display: flex; /* Keep header only on first calendar */
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
     .fc .fc-timegrid-slot-label {
       font-size: 12px;
       color: #666;
-    }
-
-    .fc .fc-timegrid-axis-frame {
-      padding: 0 4px;
     }
 
     .fc .fc-event {
       border-radius: 4px;
       font-size: 14px;
       font-weight: 600;
-      padding: 2px 4px;
+      padding: 4px 6px;
       border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
@@ -53,51 +58,34 @@
     .nogi-kids { background-color: #f4a261 !important; color: black; }
     .gi-adults { background-color: #457b9d !important; color: white; }
     .nogi-adults { background-color: #9b5de5 !important; color: white; }
-    .fc-timegrid-slot {
-      height: 1.5em; /* reduces row height for unused time slots */
-    }
-
-    .fc .fc-timegrid-slot-minor {
-      display: none; /* hides half-hour minor lines */
-    }
-
-    .fc .fc-event {
-      min-height: 40px;
-      display: flex;
-      align-items: center;
-      padding: 4px 6px;
-    }
-
   </style>
 </head>
 <body>
-  <div id="calendar"></div>
+
+  <div class="calendar-container">
+    <div id="calendar-am"></div>
+    <div id="calendar-pm"></div>
+  </div>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const calendarEl = document.getElementById('calendar');
-      const calendar = new FullCalendar.Calendar(calendarEl, {
-        googleCalendarApiKey: 'AIzaSyDfzXSfAOlDL2PXWUzmKTL6z8U4IZIBHuc', // 🔒 replace with real key
+    function buildCalendar(elId, slotMin, slotMax, showHeader) {
+      const calendar = new FullCalendar.Calendar(document.getElementById(elId), {
+        googleCalendarApiKey: 'AIzaSyDfzXSfAOlDL2PXWUzmKTL6z8U4IZIBHuc', // Replace with real API key
         initialView: 'timeGridWeek',
         allDaySlot: false,
         nowIndicator: true,
-        slotMinTime: '06:00:00',
-        slotMaxTime: '21:00:00',
-        scrollTime: '06:00:00',
-        slotDuration: '00:30:00',
-        height: 'auto',
-        dayMaxEventRows: false,
         expandRows: true,
-        firstDay: 0, // Sunday
-        headerToolbar: {
-          left: '',
-          center: 'title',
-          right: ''
-        },
+        slotMinTime: slotMin,
+        slotMaxTime: slotMax,
+        scrollTime: slotMin,
+        firstDay: 0,
+        headerToolbar: showHeader ? {
+          center: 'title'
+        } : false,
         views: {
           timeGridWeek: {
             dayHeaderFormat: { weekday: 'short' }
@@ -111,7 +99,6 @@
         ],
         eventDidMount: function(info) {
           const title = info.event.title.toLowerCase();
-
           if (title.includes('cubs') && title.includes('gi')) {
             info.el.classList.add('gi-cubs');
           } else if (title.includes('cubs') && title.includes('nogi')) {
@@ -132,6 +119,11 @@
       });
 
       calendar.render();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      buildCalendar('calendar-am', '06:00:00', '08:00:00', true);
+      buildCalendar('calendar-pm', '16:00:00', '21:00:00', false);
     });
   </script>
 </body>
