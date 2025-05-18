@@ -1,9 +1,91 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Coming Soon</title>
-  </head>
-  <body>
-    <h1>Gentle Giant BJJ Schedule Coming Soon</h1>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gentle Giant BJJ Schedule</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+
+    #calendar {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 10px;
+    }
+
+    /* Class Colors */
+    .gi-cubs { background-color: #1a936f !important; }
+    .nogi-cubs { background-color: #1a936f !important; }
+    .gi-kids { background-color: #e63946 !important; }
+    .nogi-kids { background-color: #f4a261 !important; }
+    .gi-adults { background-color: #457b9d !important; }
+    .nogi-adults { background-color: #9b5de5 !important; }
+  </style>
+</head>
+<body>
+  <div id="calendar"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@6.1.8/index.global.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        allDaySlot: false,
+        nowIndicator: true,
+        height: 'auto',
+        expandRows: true,
+        slotMinTime: '06:00:00',
+        slotMaxTime: '21:00:00',
+        firstDay: 0, // Sunday
+        headerToolbar: {
+          left: '',
+          center: 'title',
+          right: ''
+        },
+        views: {
+          timeGridWeek: {
+            dayHeaderFormat: { weekday: 'short' }
+          }
+        },
+        eventSources: [
+          {
+            url: 'https://calendar.google.com/calendar/ical/jesse%40gentlegiantjiujitsu.com/private-03008c378b8486ddae1787abd7341b36/basic.ics',
+            format: 'ics'
+          }
+        ],
+        eventDidMount: function(info) {
+          const title = info.event.title.toLowerCase();
+
+          if (title.includes('cubs') && title.includes('gi')) {
+            info.el.classList.add('gi-cubs');
+          } else if (title.includes('cubs') && title.includes('nogi')) {
+            info.el.classList.add('nogi-cubs');
+          } else if (title.includes('kids') && title.includes('gi')) {
+            info.el.classList.add('gi-kids');
+          } else if (title.includes('kids') && title.includes('nogi')) {
+            info.el.classList.add('nogi-kids');
+          } else if (title.includes('adult') && title.includes('gi')) {
+            info.el.classList.add('gi-adults');
+          } else if (title.includes('adult') && title.includes('nogi')) {
+            info.el.classList.add('nogi-adults');
+          }
+        },
+        windowResize: function(view) {
+          calendar.changeView('timeGridWeek'); // Force week view on mobile
+        }
+      });
+
+      calendar.render();
+    });
+  </script>
+</body>
 </html>
