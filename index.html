@@ -54,7 +54,16 @@
 
     /* Standardize row height */
     .fc .fc-timegrid-slot {
-      height: 30px;
+      height: 45px;
+    }
+
+    /* Optional: highlight only the full-hour lines */
+    .fc .fc-timegrid-slot.fc-timegrid-slot-lane:nth-of-type(4n) {
+      border-top: 1px solid #ccc; /* full hour lines */
+    }
+    
+    .fc .fc-timegrid-slot.fc-timegrid-slot-lane {
+      border-top: 1px dashed #eee; /* all others - subtle guide */
     }
 
     .fc .fc-timegrid-slot-minor {
@@ -114,6 +123,7 @@
         slotMaxTime: slotMax,
         scrollTime: slotMin,
         slotDuration: '00:15:00',
+        slotLabelInterval: '01:00:00',
         firstDay: 0,
         headerToolbar: showHeader ? { center: 'title' } : false,
         views: {
